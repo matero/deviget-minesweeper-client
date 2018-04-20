@@ -1,0 +1,9 @@
+jerseyclient:
+  auth:
+    myauth:
+      type: basic
+      username: myuser
+      password: mypassword
+  targets:
+    google:
+      url: "https://google.com"
