@@ -59,7 +59,7 @@
             <dependency>
                 <groupId>io.bootique.bom</groupId>
                 <artifactId>bootique-bom</artifactId>
-                <version>0.23</version>
+                <version>0.25</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -70,12 +70,10 @@
         <dependency>
             <groupId>io.bootique.jersey.client</groupId>
             <artifactId>bootique-jersey-client</artifactId>
-            <version>0.25</version>
         </dependency>
         <dependency>
             <groupId>io.bootique.logback</groupId>
             <artifactId>bootique-logback</artifactId>
-            <version>0.25</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
