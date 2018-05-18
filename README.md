@@ -1,6 +1,6 @@
 # bootique-jersey-client-demo
 
-Simple [Bootique](http://bootique.io) app demonstrating the Bootique Jersy Clieny Module.
+Simple [Bootique](http://bootique.io) app demonstrating the Bootique Jersy Client Module.
 
 # Prerequisites
 * Java 1.8 or newer.
