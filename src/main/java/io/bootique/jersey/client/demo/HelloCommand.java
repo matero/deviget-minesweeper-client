@@ -16,8 +16,11 @@ public class HelloCommand implements Command {
 
 
     @Override
-    public CommandOutcome run(final Cli arg0) {
-        Response response = targets.get().newTarget("google").request().get();
+    public CommandOutcome run(Cli cli) {
+        Response response = targets.get()
+                .newTarget("google")
+                .request()
+                .get();
         System.out.println(response.readEntity(String.class));
 
         return CommandOutcome.succeeded();
