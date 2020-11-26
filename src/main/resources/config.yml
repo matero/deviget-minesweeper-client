@@ -1,9 +1,9 @@
 jerseyclient:
-  auth:
-    myauth:
-      type: basic
-      username: myuser
-      password: mypassword
+  followRedirects: true
+  readTimeoutMs: 20000
+  connectTimeoutMs: 20000
+  asyncThreadPoolSize: 10
+
   targets:
-    google:
-      url: "https://google.com"
+    minesweeper:
+      url: "https://matero-minesweeper.herokuapp.com"

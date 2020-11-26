@@ -11,12 +11,14 @@ final class Client extends BaseModule {
         Bootique.app(args)
                 .autoLoadModules()
                 .module(Client.class)
-                .args("--hello", "--config=classpath:config.yml")
+                .args("--config=classpath:config.yml")
                 .exec()
                 .exit()
     }
 
     @Override void configure(final Binder binder) {
-        BQCoreModule.extend(binder).addCommand(HelloCommand.class)
+        BQCoreModule.extend(binder)
+                .addCommand(HelloCommand)
+                .addCommand(RegisterAccount)
     }
 }
