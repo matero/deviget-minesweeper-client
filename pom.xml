@@ -2,52 +2,318 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.bootique.parent</groupId>
-        <artifactId>bootique-parent</artifactId>
-        <version>0.13</version>
-    </parent>
+  <parent>
+    <groupId>io.bootique.parent</groupId>
+    <artifactId>bootique-parent</artifactId>
+    <version>0.14</version>
+  </parent>
 
-    <groupId>bootique-examples</groupId>
-    <artifactId>bootique-jersey-client-demo</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+  <groupId>matero</groupId>
+  <artifactId>deviget-minesweeper-client</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-    <properties>
-        <main.class>io.bootique.jersey.client.demo.Application</main.class>
-    </properties>
+  <name>Deviget Code Challenge: minesweeper client using kotlin as language.</name>
+  <description>Provide a REST API client over solution to deviget minesweeper available at https://matero-minesweeper.herokuapp.com/</description>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.bootique.bom</groupId>
-                <artifactId>bootique-bom</artifactId>
-                <version>1.0.RC1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
+  <scm>
+    <url>https://github.com/matero/minesweeper-client</url>
+    <connection>scm:git:git@github.com:matero/minesweeper-client.git</connection>
+    <developerConnection>scm:git:git@github.com:matero/minesweeper-client.git</developerConnection>
+  </scm>
+  <url>https://github.com/matero/minesweeper-client</url>
+
+  <developers>
+    <developer>
+      <id>matero</id>
+      <name>Juan José Gil</name>
+      <email>matero@gmail.com</email>
+      <url>https://twitter.com/matero</url>
+    </developer>
+  </developers>
+
+  <properties>
+    <main.class>minesweeper.Client</main.class>
+
+    <bootique.version>2.0.M1</bootique.version>
+    <jackson.version>2.11.3</jackson.version>
+    <slf4j.version>1.7.30</slf4j.version>
+  </properties>
+
+  <dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>io.bootique.jersey.client</groupId>
-            <artifactId>bootique-jersey-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.bootique.logback</groupId>
-            <artifactId>bootique-logback</artifactId>
-        </dependency>
-    </dependencies>
+      <dependency>
+        <groupId>io.bootique.bom</groupId>
+        <artifactId>bootique-bom</artifactId>
+        <version>${bootique.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
 
-    <build>
+
+      <!-- serialization -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-yaml</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-base</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-json-provider</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-joda</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <!-- logging -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jul-to-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.bootique.jersey</groupId>
+      <artifactId>bootique-jersey-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.bootique.logback</groupId>
+      <artifactId>bootique-logback</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>3.0.6</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>minesweeper-client</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>1.11.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>addSources</goal>
+              <goal>addTestSources</goal>
+              <goal>generateStubs</goal>
+              <goal>compile</goal>
+              <goal>generateTestStubs</goal>
+              <goal>compileTests</goal>
+              <goal>removeStubs</goal>
+              <goal>removeTestStubs</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <includes>
+            <include>**/*_tests.java</include>
+          </includes>
+          <excludes>
+            <exclude>**/*_specs.java</exclude>
+          </excludes>
+          <argLine>--enable-preview</argLine>
+          <environmentVariables>
+            <ENV>test</ENV>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.9.1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeScope>compile</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>${main.class}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>clean-jar-artifacts</id>
+            <phase>install</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <filesets>
+                <fileset>
+                  <directory>target/dependency/*.jar</directory>
+                </fileset>
+                <fileset>
+                  <directory>target</directory>
+                  <excludes>
+                    <exclude>minesweeper-client.jar</exclude>
+                  </excludes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.0.0-M1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- Profile used to check versions of dependencies and plugins -->
+    <profile>
+      <id>checkVersions</id>
+      <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.0.0-M3</version>
+            <executions>
+              <execution>
+                <id>enforce-versions</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireMavenVersion>
+                      <version>3.6</version>
+                    </requireMavenVersion>
+                    <requireJavaVersion>
+                      <version>11</version>
+                    </requireJavaVersion>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <version>2.8.1</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>display-dependency-updates</goal>
+                  <goal>display-plugin-updates</goal>
+                </goals>
+                <phase>compile</phase>
+                <configuration>
+                  <rulesUri>file:///${project.basedir}/maven-versions-plugin-rules-config.xml
+                  </rulesUri>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
-    </build>
+      </build>
+    </profile>
+  </profiles>
 </project>
