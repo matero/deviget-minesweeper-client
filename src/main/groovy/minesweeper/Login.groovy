@@ -7,18 +7,15 @@ import javax.ws.rs.client.Entity
 import javax.ws.rs.client.WebTarget
 import javax.ws.rs.core.Response
 
-class RegisterAccount extends MinesweeperCommand {
+final class Login extends MinesweeperCommand {
 
-    RegisterAccount() {
-        super(name: 'register',
-                description: 'Registers an Account in minesweeper game.',
+    Login() {
+        super(name: 'login',
+                description: 'Authenticates a registered user.',
                 options: [
                         [name       : 'email',
                          description: 'email to identify the account.',
                          required   : 'email_address'],
-                        [name       : 'name',
-                         description: 'name of the person using the account, if not defined the email is used.',
-                         required   : 'nickname'],
                         [name       : 'password',
                          description: 'password of the account.',
                          required   : 'password_text']])
@@ -34,19 +31,17 @@ class RegisterAccount extends MinesweeperCommand {
         if (!password || password.empty || password.blank)
             return preconditionNotAccomplished('password is required!')
 
-        def name = cli.optionString('name') ?: email
+        def credentials = [email: email, password: password]
 
-        def account = [email: email, name: name, password: password]
-
-        final Response response = webTarget.path('/register').request("application/json").post(Entity.json(account))
+        final Response response = webTarget.path('/login').request("application/json").post(Entity.json(credentials))
 
         final Map json = response.readEntity(Map)
-        if (response.status == 201) {
-            println "Your account has been created '${json.name}', remember your email is '${json.email}'."
+        if (response.status == 200) {
+            println "You login was successful '${json.name}', remember your email is '${json.email}'."
             println "Currently you can interact with minesweeper using JWT token: ${json.token}"
             return CommandOutcome.succeeded()
         } else {
-            println "Could not create the account, see the error message"
+            println "Could not login into minesweeper, see the error message"
             return CommandOutcome.failed(response.status, json.errors as String)
         }
     }

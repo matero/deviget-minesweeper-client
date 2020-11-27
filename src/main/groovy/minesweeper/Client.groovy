@@ -19,7 +19,7 @@ final class Client extends BaseModule {
 
     @Override void configure(final Binder binder) {
         BQCoreModule.extend(binder)
-                .addCommand(HelloCommand)
+                .addCommand(Login)
                 .addCommand(RegisterAccount)
                 .addOption(OptionMetadata.builder("local")
                         .description("Instructs the server to use a local server instead the heroku one.")
