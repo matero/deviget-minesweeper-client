@@ -26,6 +26,7 @@ final class Client extends BaseModule {
                 .addCommand(CreateGame)
                 .addCommand(RevealCell)
                 .addCommand(FlagCell)
+                .addCommand(UnflagCell)
                 .addOption(OptionMetadata.builder("local")
                         .description("Instructs the server to use a local server instead the heroku one.")
                         .build())
