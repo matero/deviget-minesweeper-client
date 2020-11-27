@@ -13,16 +13,22 @@ import javax.inject.Provider
 import javax.ws.rs.client.Entity
 import javax.ws.rs.client.WebTarget
 
+import static groovy.json.JsonOutput.prettyPrint
+import static groovy.json.JsonOutput.toJson
+
 abstract class MinesweeperCommand extends CommandWithMetadata {
     protected static final int PRECONDITION_NOT_ACCOMPLISHED = 255
     protected static final Entity<Object> NOTHING = Entity.json(null)
     protected static final String APPLICATION_JSON = "application/json"
+    protected static final String AUTHORIZATION = "Authorization"
 
-    @Inject private Provider<HttpTargets> targets
+    @Inject
+    private Provider<HttpTargets> targets
 
-    protected MinesweeperCommand(final Map metadata) {
-        super(describedWith(metadata))
-    }
+    private WebTarget webTarget
+    private Cli cli
+
+    protected MinesweeperCommand(final Map metadata) { super(describedWith(metadata)) }
 
     private static CommandMetadata.Builder describedWith(final Map metadata) {
         CommandMetadata.Builder commandMetadataBuilder
@@ -74,15 +80,96 @@ abstract class MinesweeperCommand extends CommandWithMetadata {
     CommandOutcome run(final Cli cli) {
         boolean useLocalServer = cli.hasOption("local")
         def httpTargets = targets.get()
-        final WebTarget webTarget= httpTargets.newTarget(useLocalServer? "local" : "heroku")
-        return run(cli, webTarget)
+
+        webTarget = httpTargets.newTarget(useLocalServer ? "local" : "heroku")
+        this.cli = cli
+
+        try {
+            return execute()
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return CommandOutcome.failed(PRECONDITION_NOT_ACCOMPLISHED, e.message)
+        }
     }
 
-    abstract CommandOutcome run(Cli cli, WebTarget webTarget)
+    /**
+     * Executes the command after the webTarget has been defined and the cli is registered.
+     * @return the outcome of executing the command.
+     */
+    protected abstract CommandOutcome execute()
 
-    protected static CommandOutcome preconditionNotAccomplished(String message) {
-        CommandOutcome.failed(PRECONDITION_NOT_ACCOMPLISHED, message)
+    protected WebTarget to(final String path) { webTarget.path(path) }
+
+    /**
+     * Checks if an option is defined.
+     *
+     * @param name name of the option to check.
+     *
+     * @return @{code false} if the cli doesn't have the option, or its value is @{code null}, @{code empty} or
+     * @{code blank}, @{code true} in any other case.
+     */
+    protected boolean has(final String name) {
+        final String value = cli.optionString(name)
+        return value && !value.empty && !value.blank
     }
 
-    protected static String bearer(String token) { return "Bearer " + token }
+    /**
+     * Reads the value of an option
+     *
+     * @param name name of the option to read.
+     *
+     * @return the value of the option or @{code null} if option is undefined.
+     */
+    protected String option(final String name) { optionOrElse(name, null) }
+
+    /**
+     * Reads the value of an option, if not defined returns the provided default value.
+     *
+     * @param name name of the option to read.
+     * @param defaultValue result when option is undefined.
+     *
+     * @return the value of the option or the @{code defaultValue} if option is undefined.
+     */
+    protected String optionOrElse(final String name, final String defaultValue) {
+        final String value = cli.optionString(name)
+        return value ? value.trim() : defaultValue
+    }
+
+    /**
+     * Reads the value of a required option.
+     *
+     * @param name name of the option to read.
+     *
+     * @return the value of the option.
+     *
+     * @throws IllegalStateException if the option is not defined.
+     * @throws IllegalArgumentException if the option is null, empty or blank.
+     */
+    protected String getOption(final String name) {
+        if (!cli.hasOption(name))
+            throw new IllegalStateException("$name is required!")
+        final String value = cli.optionString(name)
+        if (!value || value.empty || value.blank)
+            throw new IllegalArgumentException("$name is required!")
+        return value.trim()
+    }
+
+
+    /**
+     * Reads the value of a required int option.
+     *
+     * @param name name of the option to read.
+     *
+     * @return the value of the option.
+     *
+     * @throws IllegalStateException if the option is not defined.
+     * @throws IllegalArgumentException if the option is null, empty or blank.
+     * @throws NumberFormatException if the option value doesn't represent an integer.
+     */
+    protected int getIntOption(final String name) { Integer.parseInt(getOption(name)) }
+
+    protected String getBearer() { "Bearer " + getOption("token") }
+
+    protected static String show(final Object definition) { prettyPrint(toJson(definition)) }
+
+    protected static <T> Entity<T> asJson(final T entity) { Entity.json(entity) }
 }

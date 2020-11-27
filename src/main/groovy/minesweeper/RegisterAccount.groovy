@@ -25,20 +25,14 @@ class RegisterAccount extends MinesweeperCommand {
     }
 
     @Override
-    CommandOutcome run(final Cli cli, final WebTarget webTarget) {
-        final String email = cli.optionString('email')
-        if (!email || email.empty || email.blank)
-            return preconditionNotAccomplished('email is required!')
-
-        final String password = cli.optionString('password')
-        if (!password || password.empty || password.blank)
-            return preconditionNotAccomplished('password is required!')
-
-        def name = cli.optionString('name') ?: email
+    protected CommandOutcome execute() {
+        final String email = getOption('email')
+        final String password = getOption('password')
+        def name = optionOrElse('name', email)
 
         def account = [email: email, name: name, password: password]
 
-        final Response response = webTarget.path('/register').request(APPLICATION_JSON).post(Entity.json(account))
+        final Response response = to('/register').request(APPLICATION_JSON).post(asJson(account))
 
         final Map json = response.readEntity(Map)
         if (response.status == 201) {

@@ -170,10 +170,9 @@
         <artifactId>mockito-junit-jupiter</artifactId>
         <version>3.6.28</version>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
-                                                           up
+
   <dependencies>
     <dependency>
       <groupId>io.bootique.jersey</groupId>

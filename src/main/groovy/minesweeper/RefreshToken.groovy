@@ -21,15 +21,8 @@ final class RefreshToken extends MinesweeperCommand {
     }
 
     @Override
-    CommandOutcome run(final Cli cli, final WebTarget webTarget) {
-        final String token = cli.optionString('token')
-        if (!token || token.empty || token.blank)
-            return preconditionNotAccomplished('JWT token is required!')
-
-        final Response response = webTarget.path('/refresh')
-                .request(APPLICATION_JSON)
-                .header("Authorization", bearer(token))
-                .post(NOTHING)
+    protected CommandOutcome execute() {
+        final Response response = to('/refresh').request(APPLICATION_JSON).header(AUTHORIZATION, bearer).post(NOTHING)
 
         final Map json = response.readEntity(Map)
         if (response.status == 200) {
