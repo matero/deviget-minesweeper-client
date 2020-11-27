@@ -23,6 +23,7 @@ final class Client extends BaseModule {
                 .addCommand(RefreshToken)
                 .addCommand(RegisterAccount)
                 .addCommand(ListGames)
+                .addCommand(CreateGame)
                 .addOption(OptionMetadata.builder("local")
                         .description("Instructs the server to use a local server instead the heroku one.")
                         .build())

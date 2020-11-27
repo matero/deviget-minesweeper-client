@@ -26,8 +26,8 @@ final class ListGames extends MinesweeperCommand {
             return preconditionNotAccomplished('JWT token is required!')
 
         final Response response = webTarget.path('/games')
-                .request()
-                .header("Authorization", "Bearer $token")
+                .request(APPLICATION_JSON)
+                .header("Authorization", bearer(token))
                 .get()
 
         if (response.status == 200) {
@@ -43,7 +43,7 @@ final class ListGames extends MinesweeperCommand {
                 default:
                     println "Currently you have ${games.size()} games created.\n"
                     games.eachWithIndex { def game, int i ->
-                        println "${i}) ${prettyPrint(toJson(game))}\n"
+                        println "${i + 1}) ${prettyPrint(toJson(game))}\n"
                     }
                     break
             }

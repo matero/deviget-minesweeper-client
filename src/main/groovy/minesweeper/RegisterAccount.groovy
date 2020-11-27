@@ -38,7 +38,7 @@ class RegisterAccount extends MinesweeperCommand {
 
         def account = [email: email, name: name, password: password]
 
-        final Response response = webTarget.path('/register').request("application/json").post(Entity.json(account))
+        final Response response = webTarget.path('/register').request(APPLICATION_JSON).post(Entity.json(account))
 
         final Map json = response.readEntity(Map)
         if (response.status == 201) {

@@ -27,9 +27,9 @@ final class RefreshToken extends MinesweeperCommand {
             return preconditionNotAccomplished('JWT token is required!')
 
         final Response response = webTarget.path('/refresh')
-                .request()
-                .header("Authorization", "Bearer $token")
-                .post(Entity.json(null))
+                .request(APPLICATION_JSON)
+                .header("Authorization", bearer(token))
+                .post(NOTHING)
 
         final Map json = response.readEntity(Map)
         if (response.status == 200) {

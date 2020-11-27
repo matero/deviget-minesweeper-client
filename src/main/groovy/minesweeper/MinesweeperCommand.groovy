@@ -1,6 +1,5 @@
 package minesweeper
 
-import groovy.transform.PackageScope
 import io.bootique.cli.Cli
 import io.bootique.command.Command
 import io.bootique.command.CommandOutcome
@@ -11,10 +10,13 @@ import io.bootique.meta.application.OptionMetadata
 
 import javax.inject.Inject
 import javax.inject.Provider
+import javax.ws.rs.client.Entity
 import javax.ws.rs.client.WebTarget
 
 abstract class MinesweeperCommand extends CommandWithMetadata {
-    @PackageScope static final int PRECONDITION_NOT_ACCOMPLISHED = 255
+    protected static final int PRECONDITION_NOT_ACCOMPLISHED = 255
+    protected static final Entity<Object> NOTHING = Entity.json(null)
+    protected static final String APPLICATION_JSON = "application/json"
 
     @Inject private Provider<HttpTargets> targets
 
@@ -81,4 +83,6 @@ abstract class MinesweeperCommand extends CommandWithMetadata {
     protected static CommandOutcome preconditionNotAccomplished(String message) {
         CommandOutcome.failed(PRECONDITION_NOT_ACCOMPLISHED, message)
     }
+
+    protected static String bearer(String token) { return "Bearer " + token }
 }
