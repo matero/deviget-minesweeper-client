@@ -133,8 +133,8 @@
       <artifactId>bootique-jersey-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.bootique.logback</groupId>
-      <artifactId>bootique-logback</artifactId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
