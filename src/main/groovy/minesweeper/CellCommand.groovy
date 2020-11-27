@@ -48,8 +48,14 @@ abstract class CellCommand extends MinesweeperCommand {
             return CommandOutcome.succeeded()
         } else {
             final Map json = response.readEntity(Map)
-            println "Could not create the game, see the error message"
-            return CommandOutcome.failed(response.status, json.errors as String)
+            final String msg = json.errors as String
+            if (response.status == 422) {// game was finished
+                if (msg.contains("WON"))
+                    return CommandOutcome.failed(response.status, "Nothing done, game was WON")
+                if (msg.contains("LOOSE"))
+                    return CommandOutcome.failed(response.status, "Nothing done, game was over")
+            }
+            return CommandOutcome.failed(response.status, msg)
         }
     }
 }
