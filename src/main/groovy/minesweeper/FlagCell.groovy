@@ -12,15 +12,13 @@ final class FlagCell extends CellCommand {
 
     @Override
     protected String getSuccessMessage(final int row, final int column, final Map game) {
-        switch (game.status) {
-            case "PLAYING":
-                String[] board = game.board as String[]
-                if (board[row].charAt(column) == FLAG)
-                    return "Cell ($row, $column) has been flagged"
-                else
-                    return "Nothing done, cell ($row, $column) was revealed"
-            default:
-                throw new IllegalStateException("unexpected game status: '${game.status}'")
-        }
+        if ("PLAYING" != game.status)
+            throw new IllegalStateException("unexpected game status: '${game.status}'")
+
+        final String[] board = game.board as String[]
+        if (board[row].charAt(column) == FLAG)
+            return "Cell ($row, $column) has been flagged"
+        else
+            return "Nothing done, cell ($row, $column) was revealed"
     }
 }
