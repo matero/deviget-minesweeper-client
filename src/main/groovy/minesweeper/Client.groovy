@@ -17,7 +17,8 @@ final class Client extends BaseModule {
                 .exit()
     }
 
-    @Override void configure(final Binder binder) {
+    @Override
+    void configure(final Binder binder) {
         BQCoreModule.extend(binder)
                 .addCommand(Login)
                 .addCommand(RefreshToken)
@@ -27,6 +28,7 @@ final class Client extends BaseModule {
                 .addCommand(RevealCell)
                 .addCommand(FlagCell)
                 .addCommand(UnflagCell)
+                .addCommand(PauseGame)
                 .addOption(OptionMetadata.builder("local")
                         .description("Instructs the server to use a local server instead the heroku one.")
                         .build())
