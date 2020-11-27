@@ -6,6 +6,6 @@ jerseyclient:
 
   targets:
     heroku:
-      url: "https://matero-minesweeper.herokuapp.com"
+      url: "http://localhost:8765"
     local:
-      url: "http://localhost:5000"
+      url: "http://localhost:8765"

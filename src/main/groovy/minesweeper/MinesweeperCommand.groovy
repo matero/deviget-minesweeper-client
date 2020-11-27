@@ -1,5 +1,6 @@
 package minesweeper
 
+import groovy.transform.PackageScope
 import io.bootique.cli.Cli
 import io.bootique.command.Command
 import io.bootique.command.CommandOutcome
@@ -13,8 +14,9 @@ import javax.inject.Provider
 import javax.ws.rs.client.WebTarget
 
 abstract class MinesweeperCommand extends CommandWithMetadata {
-    @Inject
-    private Provider<HttpTargets> targets
+    @PackageScope static final int PRECONDITION_NOT_ACCOMPLISHED = 255
+
+    @Inject private Provider<HttpTargets> targets
 
     protected MinesweeperCommand(final Map metadata) {
         super(describedWith(metadata))
@@ -51,6 +53,9 @@ abstract class MinesweeperCommand extends CommandWithMetadata {
                     if (it.description)
                         optionMetadataBuilder.description(it.description as String)
 
+                    if (it.required)
+                        optionMetadataBuilder.valueRequired(it.required as String)
+
                     commandMetadataBuilder.addOption(optionMetadataBuilder)
                 } else if (it instanceof OptionMetadata) {
                     commandMetadataBuilder.addOption(it)
@@ -65,9 +70,15 @@ abstract class MinesweeperCommand extends CommandWithMetadata {
 
     @Override
     CommandOutcome run(final Cli cli) {
-        final WebTarget webTarget = targets.get().newTarget("minesweeper")
+        boolean useLocalServer = cli.hasOption("local")
+        def httpTargets = targets.get()
+        final WebTarget webTarget= httpTargets.newTarget(useLocalServer? "local" : "heroku")
         return run(cli, webTarget)
     }
 
     abstract CommandOutcome run(Cli cli, WebTarget webTarget)
+
+    protected static CommandOutcome preconditionNotAccomplished(String message) {
+        CommandOutcome.failed(PRECONDITION_NOT_ACCOMPLISHED, message)
+    }
 }
