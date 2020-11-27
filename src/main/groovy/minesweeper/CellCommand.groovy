@@ -3,13 +3,15 @@ package minesweeper
 
 import io.bootique.command.CommandOutcome
 
+import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Response
 
-final class FlagCell extends MinesweeperCommand {
+abstract class CellCommand extends MinesweeperCommand {
+    protected static final Entity<String> EMPTY = asJson("")
 
-    FlagCell() {
-        super(name: 'reveal',
-                description: 'Reveals a cell in a Game.',
+    CellCommand(String name, String description) {
+        super(name: name,
+                description: description,
                 options: [
                         [name       : 'game',
                          description: 'Id of the game where the cell must be revealed.',
@@ -25,20 +27,24 @@ final class FlagCell extends MinesweeperCommand {
                          required   : 'jwt_token']])
     }
 
+    protected abstract String getAction();
+
+    protected abstract String getSuccessMessage(int row, int column, Map game);
+
     @Override
     protected CommandOutcome execute() {
         final int gameId = getIntOption("game")
         final int row = getIntOption("row")
         final int column = getIntOption("column")
 
-        final Response response = to("/games/${gameId}/reveal/${row}/${column}")
+        final Response response = to("/games/${gameId}/${action}/${row}/${column}")
                 .request(APPLICATION_JSON)
                 .header(AUTHORIZATION, bearer)
                 .put(EMPTY)
 
         if (response.status == 200) {
             final Map game = response.readEntity(Map)
-            println "Cell has been revealed, actual status game:\n${show(game)}"
+            println "${getSuccessMessage(row, column, game)}.\n\n${show(game)}"
             return CommandOutcome.succeeded()
         } else {
             final Map json = response.readEntity(Map)
