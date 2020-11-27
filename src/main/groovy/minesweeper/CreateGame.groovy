@@ -25,7 +25,7 @@ final class CreateGame extends MinesweeperCommand {
                          description: 'creates a custom game, with the desired rows,columns,mines',
                          required   : 'rows,columns,mines'],
                         [name       : 'token',
-                         description: 'JWT token of an active session, that must be refreshed.',
+                         description: 'JWT token of an active session.',
                          required   : 'jwt_token']])
     }
 
