@@ -18,7 +18,10 @@ import static groovy.json.JsonOutput.toJson
 
 abstract class MinesweeperCommand extends CommandWithMetadata {
     protected static final int PRECONDITION_NOT_ACCOMPLISHED = 255
+
     protected static final Entity<Object> NOTHING = Entity.json(null)
+    protected static final Entity<String> EMPTY = asJson("")
+
     protected static final String APPLICATION_JSON = "application/json"
     protected static final String AUTHORIZATION = "Authorization"
 
