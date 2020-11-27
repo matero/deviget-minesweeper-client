@@ -16,7 +16,7 @@
   <packaging>jar</packaging>
 
   <name>Deviget Code Challenge: minesweeper client using kotlin as language.</name>
-  <description>Provide a REST API client over solution to deviget minesweeper available at https://matero-minesweeper.herokuapp.com/</description>
+  <description>Provides a REST API client over solution to deviget minesweeper available at https://matero-minesweeper.herokuapp.com/</description>
 
   <licenses>
     <license>
@@ -27,11 +27,11 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/matero/minesweeper-client</url>
-    <connection>scm:git:git@github.com:matero/minesweeper-client.git</connection>
-    <developerConnection>scm:git:git@github.com:matero/minesweeper-client.git</developerConnection>
+    <url>https://github.com/matero/deviget-minesweeper-client</url>
+    <connection>scm:git:git@github.com:matero/deviget-minesweeper-client.git</connection>
+    <developerConnection>scm:git:git@github.com:matero/deviget-minesweeper-client.git</developerConnection>
   </scm>
-  <url>https://github.com/matero/minesweeper-client</url>
+  <url>https://github.com/matero/deviget-minesweeper-client</url>
 
   <developers>
     <developer>
